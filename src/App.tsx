@@ -59,6 +59,23 @@ const App = () => {
     );
   };
 
+  const [joke, setJoke] = useState('')
+
+  const getJoke = async () => {
+    const url = 'https://api.chucknorris.io/jokes/random'
+
+    const response = await fetch(url)
+    const data = await response.json()
+
+    const totalJoke: string = data.value
+
+    setJoke(totalJoke)
+  }
+
+  useEffect(() => {
+    getJoke()
+  }, [])
+
   return (
     <div className="container py-5">
       <div className="card shadow p-4">
@@ -78,6 +95,7 @@ const App = () => {
           handleEdit={handleEdit}
         />
       </div>
+      <h1>{joke}</h1>
     </div>
   );
 };
