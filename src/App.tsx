@@ -1,10 +1,15 @@
 import "./App.css";
-import type { Task } from './Type'
-import { type ChangeEvent, type SubmitEventHandler, useEffect, useState } from "react";
+import type { Task } from "./Type";
+
+import {
+  type ChangeEvent,
+  type SubmitEventHandler,
+  useEffect,
+  useState,
+} from "react";
 
 const App = () => {
-
-  const [renderList, setRenderList] = useState<Task[]>(() => {
+  const [renderList, setList] = useState<Task[]>(() => {
     const savedTasks = localStorage.getItem("tasks");
 
     return savedTasks
@@ -12,15 +17,14 @@ const App = () => {
       : [];
   });
 
+  const [task, setTask] = useState<string>("");
+
   useEffect(() => {
-    console.log('set')
     localStorage.setItem(
       "tasks",
       JSON.stringify(renderList)
     );
   }, [renderList]);
-
-  const [task, setTask] = useState<string>("");
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (
     event
@@ -34,21 +38,36 @@ const App = () => {
       text: task,
     };
 
-    setRenderList([...renderList, newTask]);
+    setList([...renderList, newTask]);
 
     setTask("");
   };
 
   const handleDelete = (id: string) => {
-    setRenderList(
+    setList(
       renderList.filter((item) => item.id !== id)
+    );
+  };
+
+  const handleEdit = (
+    id: string,
+    value: string
+  ) => {
+    setList(
+      renderList.map((item) =>
+        item.id === id
+          ? { ...item, text: value }
+          : item
+      )
     );
   };
 
   return (
     <div className="container py-5">
       <div className="card shadow p-4">
-        <h1 className="mb-4 text-center">Todo Cinema App</h1>
+        <h1 className="mb-4 text-center">
+          Todo Cinema App
+        </h1>
 
         <form
           onSubmit={handleSubmit}
@@ -56,6 +75,7 @@ const App = () => {
         >
           <input
             type="text"
+            maxLength={100}
             className="form-control"
             placeholder="Add new task..."
             value={task}
@@ -73,11 +93,26 @@ const App = () => {
           {renderList.map((item, index) => (
             <li
               key={item.id}
-              className="list-group-item d-flex justify-content-between align-items-center"
+              className="list-group-item d-flex justify-content-between align-items-center gap-2"
             >
-              <span>
-                {index + 1}. {item.text}
-              </span>
+              <div className="d-flex align-items-center gap-2 w-100">
+                <span>{index + 1}.</span>
+
+                <input
+                  type="text"
+                  className="form-control"
+                  value={item.text}
+                  onChange={(
+                    event: ChangeEvent<HTMLInputElement>
+                  ) =>
+                    handleEdit(
+                      item.id,
+                      event.target.value
+                    )
+                  }
+                />
+              </div>
+
               <button
                 onClick={() => handleDelete(item.id)}
                 className="btn btn-danger btn-sm"
