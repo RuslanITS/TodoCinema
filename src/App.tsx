@@ -1,17 +1,25 @@
 import "./App.css";
-import { type ChangeEvent, type SubmitEventHandler, useState } from "react";
-
-type Task = {
-  id: string;
-  text: string;
-};
+import type { Task } from './Type'
+import { type ChangeEvent, type SubmitEventHandler, useEffect, useState } from "react";
 
 const App = () => {
-  const [renderList, setRenderList] = useState<Task[]>([
-    { id: '123', text: "movie cinema one" },
-    { id: '124', text: "movie cinema two" },
-    { id: '125', text: "movie cinema three" },
-  ]);
+
+  const [renderList, setRenderList] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem("tasks");
+
+    return savedTasks
+      ? JSON.parse(savedTasks)
+      : [];
+  });
+
+  useEffect(() => {
+    console.log('set')
+    localStorage.setItem(
+      "tasks",
+      JSON.stringify(renderList)
+    );
+  }, [renderList]);
+
   const [task, setTask] = useState<string>("");
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (
