@@ -1,7 +1,7 @@
 import "./App.css";
 import { type SubmitEventHandler, useEffect, useState, } from "react";
-import type { Task } from "./Type";
-
+import JokeTotalList from "./components.Task-2/JokeTotalList.tsx";
+import type { JokeApiResponse, Task } from "./Type";
 import TodoForm from "./components.Task-1/TodoForm";
 import TodoList from "./components.Task-1/TodoList";
 
@@ -59,22 +59,24 @@ const App = () => {
     );
   };
 
-  const [joke, setJoke] = useState('')
+  const [jokes, setJokes] = useState<string[]>([])
 
-  const getJoke = async () => {
+  const getJokes = async () => {
     const url = 'https://api.chucknorris.io/jokes/random'
 
-    const response = await fetch(url)
-    const data = await response.json()
+    const promises = Array.from({ length: 5 }, () => fetch(url))
 
-    const totalJoke: string = data.value
+    const responses = await Promise.all(promises)
 
-    setJoke(totalJoke)
+    const data: JokeApiResponse[] = await Promise.all(
+      responses.map((response) =>
+        response.json()
+      ));
+
+    const jokesArray = data.map((item) => item.value);
+
+    setJokes(jokesArray);
   }
-
-  useEffect(() => {
-    getJoke()
-  }, [])
 
   return (
     <div className="container py-5">
@@ -94,8 +96,11 @@ const App = () => {
           handleDelete={handleDelete}
           handleEdit={handleEdit}
         />
+        <JokeTotalList
+          jokes={jokes}
+          getJokes={getJokes}
+        />
       </div>
-      <h1>{joke}</h1>
     </div>
   );
 };
