@@ -9,11 +9,7 @@ type Props = {
   handleSubmit: SubmitEventHandler<HTMLFormElement>;
 };
 
-const TodoForm = ({
-                    task,
-                    setTask,
-                    handleSubmit,
-                  }: Props) => {
+const TodoForm = ({task, setTask, handleSubmit}: Props) => {
   return (
     <form
       onSubmit={handleSubmit}
@@ -30,9 +26,7 @@ const TodoForm = ({
         ) => setTask(event.target.value)}
       />
 
-      <button className="btn btn-primary">
-        Add
-      </button>
+      <button className="btn btn-primary">Add</button>
     </form>
   );
 };

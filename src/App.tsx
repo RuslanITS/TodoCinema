@@ -1,4 +1,3 @@
-import "./App.css";
 import { type SubmitEventHandler, useEffect, useState, } from "react";
 import JokeTotalList from "./components.Task-2/JokeTotalList.tsx";
 import type { JokeApiResponse, Task } from "./Type";

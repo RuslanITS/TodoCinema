@@ -11,12 +11,7 @@ type Props = {
   ) => void;
 };
 
-const TodoItem = ({
-                    item,
-                    index,
-                    handleDelete,
-                    handleEdit,
-                  }: Props) => {
+const TodoItem = ({item, index, handleDelete, handleEdit,}: Props) => {
   return (
     <li
       className="list-group-item d-flex justify-content-between align-items-center gap-2"

@@ -10,23 +10,27 @@ type Props = {
   ) => void;
 };
 
-const TodoList = ({
-                    renderList,
-                    handleDelete,
-                    handleEdit,
-                  }: Props) => {
+const TodoList = ({renderList, handleDelete, handleEdit,}: Props) => {
   return (
-    <ul className="list-group">
-      {renderList.map((item, index) => (
-        <TodoItem
-          key={item.id}
-          item={item}
-          index={index}
-          handleDelete={handleDelete}
-          handleEdit={handleEdit}
-        />
-      ))}
-    </ul>
+    <>
+      {renderList.length > 0 ? (
+        <ul className="list-group">
+          {renderList.map((item, index) => (
+            <TodoItem
+              key={item.id}
+              item={item}
+              index={index}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+            />
+          ))}
+        </ul>
+      ) : (
+        <p className="text-center text-muted">
+          Please enter at least one task
+        </p>
+      )}
+    </>
   );
 };
 
